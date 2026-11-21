@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Nuxoku Gifts</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; color: #fff; text-align: center;
+    background: radial-gradient(circle at 20% 0%, #1b2a55 0%, #0b1020 60%);
+  }
+  .card { width: min(92vw, 420px); padding: 28px 22px; border-radius: 24px;
+          background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(8px); }
+  img { width: 62%; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
+  h1 { margin: 18px 0 6px; font-size: 24px; letter-spacing: .5px; }
+  p  { margin: 0 0 20px; opacity: .75; line-height: 1.45; font-size: 15px; }
+  button {
+    width: 100%; padding: 16px; border: 0; border-radius: 16px; font-size: 17px; font-weight: 700;
+    color: #fff; background: linear-gradient(135deg, #4f8cff, #7a5cff); cursor: pointer;
+  }
+  button.ghost { margin-top: 10px; background: rgba(255,255,255,.1); font-weight: 500; }
+  #hint { margin-top: 16px; font-size: 13px; opacity: .7; min-height: 18px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <img id="preview" alt="story">
+    <h1>Nuxoku Gifts</h1>
+    <p>Опубликуй историю с нашим ботом — в ней будет твоя реферальная ссылка.</p>
+    <button id="share">📸 Опубликовать историю</button>
+    <button id="close" class="ghost">Вернуться в бота</button>
+    <div id="hint"></div>
+  </div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.ready(); tg.expand();
+
+  const q = new URLSearchParams(location.search);
+  const uid = q.get('uid') || (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || '';
+  const bot = q.get('bot') || '';
+  const link = `https://t.me/${bot}?start=ref_${uid}`;
+  const img = `${location.origin}/static/story.jpg`;
+
+  document.getElementById('preview').src = img;
+  const hint = document.getElementById('hint');
+
+  document.getElementById('share').onclick = () => {
+    if (!tg.shareToStory || !tg.isVersionAtLeast || !tg.isVersionAtLeast('7.8')) {
+      hint.textContent = 'Обновите Telegram, чтобы публиковать истории из бота.';
+      return;
+    }
+    tg.shareToStory(img, {
+      text: `🎁 Nuxoku Gifts — выполняй задания и получай подарки!\n${link}`,
+      // кликабельный виджет-ссылка в истории (работает у Premium-пользователей)
+      widget_link: { url: link, name: 'Nuxoku Gifts' }
+    });
+    hint.textContent = 'После публикации вернитесь в бота и нажмите «Я опубликовал(а)».';
+  };
+
+  document.getElementById('close').onclick = () => tg.close();
+</script>
+</body>
+</html>
