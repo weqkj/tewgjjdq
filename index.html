@@ -5,64 +5,296 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Nuxoku Gifts</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0" rel="stylesheet">
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
+  :root {
+    --bg: #000000;
+    --surface: #141416;
+    --surface-variant: #222327;
+    --primary: #8AB4F8;
+    --on-primary: #062E6F;
+    --secondary-container: #28292E;
+    --on-secondary-container: #E3E3E6;
+    --on-surface: #F2F2F5;
+    --on-surface-variant: #9AA0A6;
+    --outline: #2E3035;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; color: #fff; text-align: center;
-    background: radial-gradient(circle at 20% 0%, #1b2a55 0%, #0b1020 60%);
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg);
+    color: var(--on-surface);
   }
-  .card { width: min(92vw, 420px); padding: 28px 22px; border-radius: 24px;
-          background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(8px); }
-  img { max-width: 56%; max-height: 40vh; border-radius: 18px; box-shadow: 0 12px 40px rgba(0,0,0,.5); }
-  h1 { margin: 18px 0 6px; font-size: 24px; letter-spacing: .5px; }
-  p  { margin: 0 0 20px; opacity: .75; line-height: 1.45; font-size: 15px; }
+
+  /* Карточка Material You 3 */
+  .card {
+    width: min(100%, 400px);
+    padding: 28px 24px;
+    border-radius: 28px;
+    background-color: var(--surface);
+    border: 1px solid var(--outline);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+    animation: springIn 0.55s cubic-bezier(0.22, 1.25, 0.36, 1) forwards;
+  }
+
+  @keyframes springIn {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Контейнер превью истории */
+  .preview-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 24px;
+    background-color: var(--surface-variant);
+    margin-bottom: 20px;
+    transition: transform 0.35s cubic-bezier(0.22, 1.25, 0.36, 1);
+  }
+
+  .preview-wrap:active {
+    transform: scale(0.97);
+  }
+
+  img#preview {
+    display: block;
+    width: 164px;
+    max-height: 36vh;
+    object-fit: cover;
+    border-radius: 18px;
+  }
+
+  /* Заглушка на случай отсутствия локального story.jpg в режиме предпросмотра */
+  .preview-fallback {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 164px;
+    height: 230px;
+    padding: 16px;
+    border-radius: 18px;
+    background-color: #1A1B1F;
+    border: 1px dashed var(--outline);
+    color: var(--on-surface);
+  }
+
+  .preview-fallback .logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background-color: var(--secondary-container);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .preview-fallback .logo-badge .material-symbols-rounded {
+    font-size: 26px;
+  }
+
+  .preview-fallback .logo-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: var(--on-surface);
+  }
+
+  .preview-fallback .logo-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--on-surface);
+  }
+
+  p {
+    margin: 0 0 24px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--on-surface-variant);
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Кнопки-пилюли */
   button {
-    width: 100%; padding: 16px; border: 0; border-radius: 16px; font-size: 17px; font-weight: 700;
-    color: #fff; background: linear-gradient(135deg, #4f8cff, #7a5cff); cursor: pointer;
+    width: 100%;
+    height: 54px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 9999px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.22, 1.25, 0.36, 1), background-color 0.2s ease, opacity 0.2s ease;
   }
-  button.ghost { margin-top: 10px; background: rgba(255,255,255,.1); font-weight: 500; }
-  #hint { margin-top: 16px; font-size: 13px; opacity: .7; min-height: 18px; }
+
+  button:active {
+    transform: scale(0.96);
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--on-primary);
+  }
+
+  .btn-tonal {
+    background-color: var(--secondary-container);
+    color: var(--on-secondary-container);
+  }
+
+  .material-symbols-rounded {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Подсказка статуса */
+  #hint {
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--primary);
+    min-height: 18px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  #hint.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
   <div class="card">
-    <img id="preview" alt="story">
+    <div class="preview-wrap">
+      <img id="preview" alt="Nuxoku Gifts Story">
+      <div id="preview-fallback" class="preview-fallback">
+        <div class="logo-badge">
+          <span class="material-symbols-rounded">redeem</span>
+        </div>
+        <div class="logo-title">Nuxoku Gifts</div>
+        <div class="logo-sub">story.jpg</div>
+      </div>
+    </div>
+
     <h1>Nuxoku Gifts</h1>
     <p>Опубликуй историю с нашим ботом — в ней будет твоя реферальная ссылка.</p>
-    <button id="share">📸 Опубликовать историю</button>
-    <button id="close" class="ghost">Вернуться в бота</button>
+
+    <div class="actions">
+      <button id="share" class="btn-primary">
+        <span class="material-symbols-rounded">add_to_photos</span>
+        <span>Опубликовать историю</span>
+      </button>
+      <button id="close" class="btn-tonal">
+        <span class="material-symbols-rounded">arrow_back</span>
+        <span>Вернуться в бота</span>
+      </button>
+    </div>
+
     <div id="hint"></div>
   </div>
 
 <script>
-  const tg = window.Telegram.WebApp;
-  tg.ready(); tg.expand();
+  const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    if (tg.setHeaderColor) tg.setHeaderColor('#000000');
+    if (tg.setBackgroundColor) tg.setBackgroundColor('#000000');
+  }
 
   const q = new URLSearchParams(location.search);
-  const uid = q.get('uid') || (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || '';
+  const uid = q.get('uid') || (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) || '';
   const bot = q.get('bot') || '';
   const link = `https://t.me/${bot}?start=ref_${uid}`;
-  const img = new URL('story.jpg?v=2', location.href).href;  // лежит рядом с index.html
 
-  document.getElementById('preview').src = img;
+  // Безопасное формирование ссылки на story.jpg (работает и на хостинге, и в blob-предпросмотре)
+  let img = 'story.jpg?v=2';
+  try {
+    if (location.protocol.startsWith('http')) {
+      img = new URL('story.jpg?v=2', location.href).href;
+    }
+  } catch (e) {
+    img = 'story.jpg?v=2';
+  }
+
+  const previewImg = document.getElementById('preview');
+  const previewFallback = document.getElementById('preview-fallback');
+
+  // Если локальный story.jpg не найден (например, в окне предпросмотра), показываем стилизованную заглушку
+  previewImg.onerror = () => {
+    previewImg.style.display = 'none';
+    previewFallback.style.display = 'flex';
+  };
+  previewImg.src = img;
+
   const hint = document.getElementById('hint');
 
+  function showHint(text) {
+    hint.textContent = text;
+    hint.classList.add('visible');
+  }
+
   document.getElementById('share').onclick = () => {
-    if (!tg.shareToStory || !tg.isVersionAtLeast || !tg.isVersionAtLeast('7.8')) {
-      hint.textContent = 'Обновите Telegram, чтобы публиковать истории из бота.';
+    if (!tg || !tg.shareToStory || !tg.isVersionAtLeast || !tg.isVersionAtLeast('7.8')) {
+      showHint('Обновите Telegram, чтобы публиковать истории из бота.');
       return;
     }
     tg.shareToStory(img, {
-      text: `🎁 Nuxoku Gifts — выполняй задания и получай подарки!\n${link}`,
-      // кликабельный виджет-ссылка в истории (работает у Premium-пользователей)
+      text: `Nuxoku Gifts — выполняй задания и получай подарки!\n${link}`,
       widget_link: { url: link, name: 'Nuxoku Gifts' }
     });
-    hint.textContent = 'После публикации вернитесь в бота и нажмите «Я опубликовал(а)».';
+    showHint('После публикации вернитесь в бота и нажмите «Я опубликовал(а)».');
   };
 
-  document.getElementById('close').onclick = () => tg.close();
+  document.getElementById('close').onclick = () => {
+    if (tg && tg.close) {
+      tg.close();
+    }
+  };
 </script>
 </body>
 </html>
