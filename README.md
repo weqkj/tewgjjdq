@@ -4,7 +4,7 @@
 
 **Веб-приложение для генерации и оформления историй в Telegram**
 
-[`✈️ Открыть nuxokugiftbot`](https://t.me/nuxokugiftbot) • [`🌐 Сайт приложения`]([https://t.me](https://weqkj.github.io/tewgjjdq/)
+[`✈️ Открыть nuxokugiftbot`](https://t.me/nuxokugiftbot) • [`🌐 Сайт приложения`](https://weqkj.github.io/tewgjjdq/)
 
 </div>
 
